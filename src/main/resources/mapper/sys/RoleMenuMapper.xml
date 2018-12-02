@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yige.sys.dao.RoleMenuDao">
+
+    <select id="listMenuIdByRoleId" resultType="long">
+        select menu_id from role_menu_xrefs
+        <where>role_id = #{roleId}</where>
+    </select>
+
+    <delete id="removeByRoleId">
+		DELETE FROM role_menu_xrefs WHERE role_id=#{roleId}
+	</delete>
+
+    <insert id="batchSave">
+        INSERT INTO role_menu_xrefs(role_id, menu_id) values
+        <foreach item="item" index="index" collection="list"
+                 separator=",">
+            (#{item.roleId},#{item.menuId})
+        </foreach>
+    </insert>
+
+</mapper>

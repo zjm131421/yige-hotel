@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yige.sys.dao.UserRoleDao">
+
+    <select id="listRoleId" resultType="long">
+		select role_id from
+		user_role_xrefs where
+		user_id=#{userId}
+	</select>
+
+    <delete id="removeByUserId">
+		delete from user_role_xrefs where user_id=#{userId}
+	</delete>
+
+    <delete id="batchRemoveByUserId">
+        delete from user_role_xrefs where user_id in
+        <foreach item="id" collection="array" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchSave">
+        INSERT INTO user_role_xrefs(user_id, role_id) values
+        <foreach item="item" index="index" collection="list"
+                 separator=",">
+            (#{item.userId},#{item.roleId})
+        </foreach>
+    </insert>
+
+</mapper>
