@@ -10,6 +10,7 @@ import com.yige.hotel.domain.RoomDO;
 import com.yige.hotel.service.RoomService;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,6 +20,10 @@ import java.util.Optional;
  */
 @Service
 public class RoomServiceImpl extends CoreServiceImpl<RoomDao,RoomDO> implements RoomService {
+
+    public boolean validNmae(Map<String,Object> params){
+        return retBool(baseMapper.selectByMap(params).size());
+    }
 
     public RoomDO require(Long id){
         if(Objects.isNull(id)){
