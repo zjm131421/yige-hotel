@@ -1,64 +1,165 @@
 <!DOCTYPE html>
 <html>
-<head>
+<title>前台</title>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>欢迎页</title>
-<meta
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	name="viewport">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-</head>
-<body>
-	<div class="panel panel-default">
-		<div class="panel-heading">关于 IFast 快速开发框架</div>
-		<div style="padding: 10px 0 20px 20px;">
-			<h1>简介</h1>
-			<p>IFast是一款基于Spring Boot + Mybatis + Mybatis Plus搭建的快速开发平台。IFast集成了代码生成器，具有高效的开发效率。</p>
-			<p> 以Spring Boot为基础框架， Mybatis
-				plus为数据访问层, Apache Shiro为权限授权层， Ehcahe对常用数据进行缓存，基于Bootstrap构建的Admin
-				LTE作为前端框架。</p>
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content " id="app">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div id="exampleToolbar" role="group">
+                    <div class="form-group col-sm-2">
+                        <input id="searchName" type="text" class="form-control" placeholder="房间名称">
+                    </div>
+                    <button class="btn btn-success" onclick="reLoad()">查询</button>
+                </div>
 
-			<h2>定位</h2>
-			<ul>
-				<li>中小型企业项目开发脚手架，实用为主</li>
-				<li>接私活利器</li>
-				<li>个人学习</li>
-			</ul>
-			<h2>技术选型</h2>
-			1.后端
-			<ul>
+                <div class="col-sm-12 animated">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="file-box" v-for="room in rooms">
+                                <template v-if="room.status == 0">
+                                    <!--未入住-->
+                                    <div class="file" style="background-color:#00ff72;">
+                                        <a href="#">
+                                            <span class="corner"></span>
+                                            <div class="image">
+                                                <img class="img-preview-sm" src="/img/room_bg.png">
+                                            </div>
+                                            <div class="file-name">
+                                                <br/>
+                                                <small>{{room.name}}</small>
+                                            </div>
+                                            <div align="center">
+                                                &nbsp;
+                                                <button class="btn btn-success btn-xs" @click="reserve(room.id)">预定
+                                                </button>
+                                                &nbsp;
+                                                <button class="btn btn-primary btn-xs">开房</button>
+                                            </div>
+                                            <!--&nbsp;-->
+                                            <!--<button class="btn btn-info btn-xs">换房</button>-->
+                                            <!--&nbsp;-->
+                                            <!--<button class="btn btn-danger btn-xs">退房</button>-->
+                                        </a>
+                                    </div>
+                                </template>
+                                <template v-else-if="room.status == 1">
+                                    <!--已预定-->
+                                    <div class="file" style="background-color:#c000ff;">
+                                        <a href="#">
+                                            <span class="corner"></span>
+                                            <div class="image">
+                                                <img class="img-preview-sm" src="/img/room_bg.png">
+                                            </div>
+                                            <div class="file-name">
+                                                <br/>
+                                                <small>{{room.name}}</small>
+                                            </div>
+                                            <div align="center">
+                                                <!--&nbsp;-->
+                                                <!--<button class="btn btn-success btn-xs">预定</button>-->
+                                                <!--&nbsp;-->
+                                                <button class="btn btn-primary btn-xs">开房</button>
+                                                <!--&nbsp;-->
+                                                <!--<button class="btn btn-info btn-xs">换房</button>-->
+                                                <!--&nbsp;-->
+                                                <button class="btn btn-danger btn-xs">noshow</button>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </template>
+                                <template v-else-if="room.status == 2">
+                                    <!--已入住-->
+                                    <div class="file" style="background-color:#00dcff;">
+                                        <a href="#">
+                                            <span class="corner"></span>
+                                            <div class="image">
 
-				<li>核心框架：Spring Boot</li>
-				<li>安全框架：Apache Shiro</li>
-				<li>视图框架：Spring MVC</li>
-				<li>服务端验证：Hibernate Validator</li>
-				<li>任务调度：Quartz</li>
-				<li>持久层框架：Mybatis、Mybatis plus</li>
-				<li>数据库连接池：Alibaba Druid</li>
-				<li>缓存框架：Ehcache</li>
-				<li>日志管理：SLF4J、Log4j</li>
-				<li>工具类：Apache Commons、Jackson、Xstream、</li>
-			</ul>
+                                            </div>
+                                            <div class="file-name">
+                                                <br/>
+                                                <small>{{room.name}}</small>
+                                            </div>
+                                            &nbsp;
+                                            <button class="btn btn-success btn-xs">预定</button>
+                                            &nbsp;
+                                            <button class="btn btn-primary btn-xs">开房</button>
+                                            &nbsp;
+                                            <button class="btn btn-info btn-xs">换房</button>
+                                            &nbsp;
+                                            <button class="btn btn-danger btn-xs">退房</button>
+                                        </a>
+                                    </div>
+                                </template>
+                                <template v-else-if="room.status == 3">
+                                    <!--待退房-->
+                                    <div class="file" style="background-color:#69480d;">
+                                        <a href="#">
+                                            <span class="corner"></span>
+                                            <div class="image">
 
-			2.前端
-			<ul>
-				<li>JS框架：jQuery。</li>
-				<li>CSS框架：Twitter Bootstrap</li>
-				<li>数据表格：bootstrap table</li>
-				<li>对话框：layer</li>
-				<li>树结构控件：jQuery zTree</li>
-				<li>日期控件： datepicker</li>
-			</ul>
+                                            </div>
+                                            <div class="file-name">
+                                                <br/>
+                                                <small>{{room.name}}</small>
+                                            </div>
+                                            &nbsp;
+                                            <button class="btn btn-success btn-xs">预定</button>
+                                            &nbsp;
+                                            <button class="btn btn-primary btn-xs">开房</button>
+                                            &nbsp;
+                                            <button class="btn btn-info btn-xs">换房</button>
+                                            &nbsp;
+                                            <button class="btn btn-danger btn-xs">退房</button>
+                                        </a>
+                                    </div>
+                                </template>
+                                <template v-else-if="room.status == 4">
+                                    <!--已退房-->
+                                    <div class="file" style="background-color:#cc2222;">
+                                        <a href="#">
+                                            <span class="corner"></span>
+                                            <div class="image">
 
-			<h2>简单使用说明</h2>
-			<ol>
-				<li>导入ifast.sql文件到mysql数据库</li>
-				<li>导入项目到Eclipse.</li>
-				<li>修改数据库配置文件application-dev.xml中的账号密码.</li>
-				<li>启动项目,管理员账号 admin / 1</li>
-			</ol>
-		</div>
-	</div>
+                                            </div>
+                                            <div class="file-name">
+                                                <br/>
+                                                <small>{{room.name}}</small>
+                                            </div>
+                                            &nbsp;
+                                            <button class="btn btn-success btn-xs">预定</button>
+                                            &nbsp;
+                                            <button class="btn btn-primary btn-xs">开房</button>
+                                            &nbsp;
+                                            <button class="btn btn-info btn-xs">换房</button>
+                                            &nbsp;
+                                            <button class="btn btn-danger btn-xs">退房</button>
+                                        </a>
+                                    </div>
+                                </template>
+                            </div>
+                            <div id="incomeNum"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <ul id="page"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery.min.js?v=2.1.4"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/bootstrap-paginator.min.js"></script>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/js/layui.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/vue.min.js"></script>
+<script src="/js/appjs/main.js"></script>
 </body>
 </html>

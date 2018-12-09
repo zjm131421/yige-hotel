@@ -1,4 +1,4 @@
-package com.yige.hotel;
+package com.yige.hotel.enums;
 
 /**
  * 房间状态枚举
@@ -15,20 +15,20 @@ public enum RoomStatus {
 
     ;
 
-    private int bh;
+    private int code;
     private String name;
 
     RoomStatus(int bh, String name) {
-        this.bh = bh;
+        this.code = bh;
         this.name = name;
     }
 
-    public int getBh() {
-        return bh;
+    public int getCode() {
+        return code;
     }
 
-    public void setBh(int bh) {
-        this.bh = bh;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getName() {

@@ -1,10 +1,9 @@
 package com.yige.hotel.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.yige.common.base.CoreServiceImpl;
 import com.yige.common.exception.GeneralException;
 import com.yige.common.helper.DateHelpers;
-import com.yige.hotel.RoomStatus;
+import com.yige.hotel.enums.RoomStatus;
 import com.yige.hotel.dao.RoomDao;
 import com.yige.hotel.domain.RoomDO;
 import com.yige.hotel.service.RoomService;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @Service
 public class RoomServiceImpl extends CoreServiceImpl<RoomDao,RoomDO> implements RoomService {
 
-    public boolean validNmae(Map<String,Object> params){
+    public boolean validName(Map<String,Object> params){
         return retBool(baseMapper.selectByMap(params).size());
     }
 
@@ -64,7 +63,7 @@ public class RoomServiceImpl extends CoreServiceImpl<RoomDao,RoomDO> implements 
     private void initData(RoomDO data) {
         data.setEnabled(1);
         data.setCrateTime(DateHelpers.now());
-        data.setStatus(RoomStatus.WRZ.getBh());
+        data.setStatus(RoomStatus.WRZ.getCode());
     }
 
 }
