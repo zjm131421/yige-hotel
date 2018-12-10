@@ -1,18 +1,25 @@
 package com.yige.hotel.service.impl;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.yige.common.base.CoreServiceImpl;
+import com.yige.common.domain.DictDO;
 import com.yige.common.exception.GeneralException;
 import com.yige.common.helper.DateHelpers;
+import com.yige.common.service.impl.DictServiceImpl;
 import com.yige.hotel.dao.RoomBookDao;
 import com.yige.hotel.domain.RoomBookDO;
 import com.yige.hotel.domain.RoomDO;
+import com.yige.hotel.dto.RoomDTO;
 import com.yige.hotel.enums.Enabled;
 import com.yige.hotel.enums.RoomBookStatus;
-import com.yige.hotel.enums.RoomStatus;
 import com.yige.hotel.service.RoomBookService;
+import com.yige.hotel.vo.RoomVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,7 +31,7 @@ import java.util.Optional;
 public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO> implements RoomBookService {
 
     @Autowired
-    private RoomServiceImpl roomService;
+    private DictServiceImpl dictService;
 
     public RoomBookDO require(Long id){
         if(Objects.isNull(id)){
@@ -39,24 +46,25 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
 
     /**
      * 预定
-     * @param roomBookDO
-     * @param roomDO
-     * @return
+     * @param roomBookDO 预订入参
+     * @param roomDO 房间
+     * @return RoomBookDO
      */
     public RoomBookDO booking(RoomBookDO roomBookDO,RoomDO roomDO){
-        validateBook(roomBookDO,roomDO);
         initBook(roomBookDO,roomDO);
+        validateBook(roomBookDO);
         insert(roomBookDO);
-
-        roomDO.setStatus(RoomStatus.YYD.getCode());
-        roomService.updateById(roomDO);
         return roomBookDO;
     }
 
-    private void validateBook(RoomBookDO roomBookDO, RoomDO roomDO) {
-        int roomStatus = RoomStatus.WRZ.getCode();
-        if(roomStatus != roomDO.getStatus()){
-            throw new GeneralException(String.format("房间状态不正确：%d",roomDO.getStatus()));
+    private void validateBook(RoomBookDO roomBookDO) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("room_id",roomBookDO.getRoomId());
+        map.put("enabled",1);
+        map.put("book_date",roomBookDO.getBookDate());
+        RoomBookDO exists = selectByMap(map).stream().findFirst().orElse(null);
+        if(Objects.nonNull(exists)){
+            throw new GeneralException(String.format("该房间状态不正确：%s,无法预订",exists.getStatus()));
         }
     }
 
@@ -64,18 +72,25 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         roomBookDO.setEnabled(Enabled.WX.getCode());
         roomBookDO.setStatus(RoomBookStatus.WRZ.getCode());
         this.updateById(roomBookDO);
-
-        RoomDO roomDO = roomService.require(roomBookDO.getRoomId());
-        roomDO.setStatus(RoomStatus.WRZ.getCode());
-        roomService.updateById(roomDO);
         return roomBookDO;
     }
 
     private void initBook(RoomBookDO roomBookDO,RoomDO roomDO) {
         roomBookDO.setStatus(RoomBookStatus.YYD.getCode());
         roomBookDO.setCreateTime(DateHelpers.now());
+        roomBookDO.setBookDate(roomBookDO.getArrivalTime().toLocalDate());
         roomBookDO.setEnabled(Enabled.YX.getCode());
         roomBookDO.setRoomId(roomDO.getId());
     }
 
+    @SuppressWarnings("unchecked")
+    public Page<RoomVO> listBook(Page page,RoomDTO dto) {
+        List<RoomVO> vos = this.baseMapper.listBook(page,dto);
+        vos.forEach(roomVO -> {
+            DictDO dictDO = dictService.selectById(roomVO.getType());
+            roomVO.setTypeName(dictDO.getName());
+        });
+        page.setRecords(vos);
+        return page;
+    }
 }

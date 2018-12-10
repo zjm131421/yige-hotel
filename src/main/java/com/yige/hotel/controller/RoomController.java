@@ -9,6 +9,7 @@ import com.yige.common.service.impl.DictServiceImpl;
 import com.yige.common.utils.Result;
 import com.yige.hotel.domain.RoomBookDO;
 import com.yige.hotel.domain.RoomDO;
+import com.yige.hotel.dto.RoomDTO;
 import com.yige.hotel.service.impl.RoomBookServiceImpl;
 import com.yige.hotel.service.impl.RoomServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,57 +38,14 @@ public class RoomController extends AdminBaseController {
     private RoomServiceImpl roomService;
     @Autowired
     private DictServiceImpl dictService;
-    @Autowired
-    private RoomBookServiceImpl roomBookService;
 
     private static final String PREFIX = "hotel/room";
-
-    /**
-     * 预定
-     */
-    @Log("预定房间")
-    @ResponseBody
-    @PostMapping("/book/{id}")
-    @RequiresPermissions("hotel:room:book")
-    public Result<String> book(@PathVariable("id") Long id, RoomBookDO roomBookDO) {
-        try{
-            RoomDO roomDO = roomService.require(id);
-            roomBookService.booking(roomBookDO, roomDO);
-        }catch (Exception e){
-            return Result.build(Result.fail().getCode(),"预定异常");
-        }
-
-        return Result.ok();
-    }
-
-    @Log("进入预定页面")
-    @GetMapping("/book/{id}")
-    @RequiresPermissions("hotel:room:book")
-    String book(@PathVariable("id") Long id, Model model) {
-        RoomDO roomDO = roomService.require(id);
-        model.addAttribute("room", roomDO);
-        return PREFIX + "/book";
-    }
 
     @GetMapping
     @Log("进入房间页面")
     @RequiresPermissions("hotel:room:room")
     String room() {
         return PREFIX + "/room";
-    }
-
-    @Log("查询房间列表")
-    @RequiresPermissions("hotel:room:room")
-    @RequestMapping("/listBook")
-    @ResponseBody
-    Result<Page<RoomDO>> listBook(RoomDO roomDto) {
-        roomDto.setEnabled(1);
-        Page<RoomDO> page = roomService.selectPage(getPage(RoomDO.class), new EntityWrapper<>(roomDto));
-        page.getRecords().forEach(roomDO -> {
-            DictDO dictDO = dictService.selectById(roomDO.getType());
-            roomDO.setTypeName(Objects.isNull(dictDO) ? "" : dictDO.getName());
-        });
-        return Result.ok(page);
     }
 
     @Log("查询房间列表")

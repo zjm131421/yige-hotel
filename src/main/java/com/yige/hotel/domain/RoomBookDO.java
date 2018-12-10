@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -22,10 +23,10 @@ public class RoomBookDO extends Model<RoomBookDO> implements Serializable {
     private Long roomId;
     private String customerName;
     private String customerMobile;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate bookDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime keepTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime expectTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime arrivalTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

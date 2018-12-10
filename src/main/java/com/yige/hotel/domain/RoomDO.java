@@ -31,7 +31,6 @@ public class RoomDO extends Model<RoomDO> implements Serializable {
     private Integer televioned; //是否有电话
     private Integer hasToilet; //是否有厕所
     private Long price; //价格
-    private Integer status; //状态 0 未入住 1已预订 2已入住 3待退房 4已退房待清扫
     private String remark;
     private Integer enabled; //是否有效 0 无效 1有效
     private LocalDateTime crateTime;

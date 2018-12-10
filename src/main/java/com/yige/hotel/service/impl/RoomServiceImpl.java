@@ -3,7 +3,6 @@ package com.yige.hotel.service.impl;
 import com.yige.common.base.CoreServiceImpl;
 import com.yige.common.exception.GeneralException;
 import com.yige.common.helper.DateHelpers;
-import com.yige.hotel.enums.RoomStatus;
 import com.yige.hotel.dao.RoomDao;
 import com.yige.hotel.domain.RoomDO;
 import com.yige.hotel.service.RoomService;
@@ -63,7 +62,6 @@ public class RoomServiceImpl extends CoreServiceImpl<RoomDao,RoomDO> implements 
     private void initData(RoomDO data) {
         data.setEnabled(1);
         data.setCrateTime(DateHelpers.now());
-        data.setStatus(RoomStatus.WRZ.getCode());
     }
 
 }

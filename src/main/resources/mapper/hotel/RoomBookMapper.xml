@@ -3,4 +3,33 @@
 
 <mapper namespace="com.yige.hotel.dao.RoomBookDao">
 
+    <select id="listBook" parameterType="com.yige.hotel.dto.RoomDTO" resultType="com.yige.hotel.vo.RoomVO">
+        select t1.id as room_id,t1.name,t1.type,t2.id as book_id,t2.`status` from rooms t1
+        left join room_bookings t2 on t1.id = t2.room_id
+        <include refid="conditionSql"></include>
+    </select>
+
+    <select id="countBook" parameterType="com.yige.hotel.dto.RoomDTO" resultType="Integer">
+        select count(1) from rooms t1
+        left join room_bookings t2 on t1.id = t2.room_id
+        where t1.enabled = 1
+        <include refid="conditionSql"></include>
+    </select>
+
+    <sql id="conditionSql">
+        <where>
+            t1.enabled = 1
+            <if test='name !=null and name !=""'>
+                and t1.name = #{name}
+            </if>
+            <if test='type !=null and type !=""'>
+                and t1.type = #{type}
+            </if>
+            <if test='status !=null and status !=""'>
+                and t2.status = #{status}
+            </if>
+        </where>
+    </sql>
+
+
 </mapper>

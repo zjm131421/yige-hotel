@@ -10,7 +10,7 @@
             <div class="ibox-body">
                 <div id="exampleToolbar" role="group">
                     <div class="form-group col-sm-2">
-                        <input id="searchName" type="text" class="form-control" placeholder="房间名称">
+                        <input id="name" type="text" class="form-control" v-model="name" placeholder="房间名称">
                     </div>
                     <button class="btn btn-success" onclick="reLoad()">查询</button>
                 </div>
@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="file-box" v-for="room in rooms">
-                                <template v-if="room.status == 0">
+                                <template v-if="room.status == null">
                                     <!--未入住-->
                                     <div class="file" style="background-color:#00ff72;">
                                         <a href="#">
@@ -29,11 +29,11 @@
                                             </div>
                                             <div class="file-name">
                                                 <br/>
-                                                <small>{{room.name}}</small>
+                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             <div align="center">
                                                 &nbsp;
-                                                <button class="btn btn-success btn-xs" @click="reserve(room.id)">预定
+                                                <button class="btn btn-success btn-xs" @click="reserve(room.roomId)">预定
                                                 </button>
                                                 &nbsp;
                                                 <button class="btn btn-primary btn-xs">开房</button>
@@ -55,7 +55,7 @@
                                             </div>
                                             <div class="file-name">
                                                 <br/>
-                                                <small>{{room.name}}</small>
+                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             <div align="center">
                                                 <!--&nbsp;-->
@@ -80,7 +80,7 @@
                                             </div>
                                             <div class="file-name">
                                                 <br/>
-                                                <small>{{room.name}}</small>
+                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             &nbsp;
                                             <button class="btn btn-success btn-xs">预定</button>
@@ -103,7 +103,7 @@
                                             </div>
                                             <div class="file-name">
                                                 <br/>
-                                                <small>{{room.name}}</small>
+                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             &nbsp;
                                             <button class="btn btn-success btn-xs">预定</button>
@@ -117,7 +117,7 @@
                                     </div>
                                 </template>
                                 <template v-else-if="room.status == 4">
-                                    <!--已退房-->
+                                    <!--已退房待请扫-->
                                     <div class="file" style="background-color:#cc2222;">
                                         <a href="#">
                                             <span class="corner"></span>
@@ -126,7 +126,7 @@
                                             </div>
                                             <div class="file-name">
                                                 <br/>
-                                                <small>{{room.name}}</small>
+                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             &nbsp;
                                             <button class="btn btn-success btn-xs">预定</button>

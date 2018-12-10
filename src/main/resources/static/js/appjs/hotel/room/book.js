@@ -13,7 +13,7 @@ function book() {
     $.ajax({
         cache: true,
         type: "POST",
-        url: "/hotel/room/book/"+roomId,
+        url: "/hotel/room/book/add/"+roomId,
         data: $('#signupForm').serialize(),
         async: false,
         error: function (request) {

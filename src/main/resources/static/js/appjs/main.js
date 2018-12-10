@@ -3,6 +3,7 @@ room = {};
 var app = new Vue({
     el: '#app',
     data: {
+        name:'',
         total: 0,
         rooms: '',
         pageInfo : {},
@@ -11,7 +12,8 @@ var app = new Vue({
     },
     methods: {
         getData: function () {
-            $.getJSON("/hotel/room/listBook", {
+            $.getJSON("/hotel/room/book/list", {
+                name:this.name,
                 pageNumber: this.pageNumber,
                 pageSize: this.pageSize
             }, function (r) {
@@ -58,7 +60,7 @@ var app = new Vue({
                 maxmin : true,
                 shadeClose : false, // 点击遮罩关闭层
                 area : [ '800px', '520px' ],
-                content : 'hotel/room/book/'+id
+                content : 'hotel/room/book/get/'+id
             });
         }
     },
