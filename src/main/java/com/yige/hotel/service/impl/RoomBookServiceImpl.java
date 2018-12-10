@@ -1,5 +1,6 @@
 package com.yige.hotel.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yige.common.base.CoreServiceImpl;
 import com.yige.common.domain.DictDO;
@@ -17,6 +18,7 @@ import com.yige.hotel.vo.RoomVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +46,14 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         return Optional.ofNullable(selectById(id));
     }
 
+    public Optional<RoomBookDO> getByBookDate(Long roomId, String bookDate){
+        RoomDTO dto = new RoomDTO();
+        dto.setRoomId(roomId);
+        dto.setBookDate(bookDate);
+        dto.setEnabled(Enabled.YX.getCode());
+        return Optional.ofNullable(this.baseMapper.getByDto(dto));
+    }
+
     /**
      * 预定
      * @param roomBookDO 预订入参
@@ -58,13 +68,9 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
     }
 
     private void validateBook(RoomBookDO roomBookDO) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("room_id",roomBookDO.getRoomId());
-        map.put("enabled",1);
-        map.put("book_date",roomBookDO.getBookDate());
-        RoomBookDO exists = selectByMap(map).stream().findFirst().orElse(null);
-        if(Objects.nonNull(exists)){
-            throw new GeneralException(String.format("该房间状态不正确：%s,无法预订",exists.getStatus()));
+        Optional<RoomBookDO> optionalBookDO = getByBookDate(roomBookDO.getRoomId(), roomBookDO.getBookDate().toString());
+        if(optionalBookDO.isPresent()){
+            throw new GeneralException(String.format("该房间状态不正确：%s,无法预订",optionalBookDO.get().getStatus()));
         }
     }
 
@@ -85,10 +91,17 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
 
     @SuppressWarnings("unchecked")
     public Page<RoomVO> listBook(Page page,RoomDTO dto) {
+        if(Objects.isNull(dto.getBookDate())){
+            dto.setBookDate(DateHelpers.today().toString());
+        }
         List<RoomVO> vos = this.baseMapper.listBook(page,dto);
         vos.forEach(roomVO -> {
             DictDO dictDO = dictService.selectById(roomVO.getType());
             roomVO.setTypeName(dictDO.getName());
+            Optional<RoomBookDO> optionalBookDO = getByBookDate(roomVO.getRoomId(), dto.getBookDate());
+            optionalBookDO.ifPresent(roomBookDO ->
+                roomVO.setStatus(roomBookDO.getStatus())
+            );
         });
         page.setRecords(vos);
         return page;

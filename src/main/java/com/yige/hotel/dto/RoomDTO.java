@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @Data
 public class RoomDTO extends RoomDO {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate bookDate;
+    private String bookDate;
     private Integer status;
+    private Long roomId;
+    private Integer enabled;
 
 }

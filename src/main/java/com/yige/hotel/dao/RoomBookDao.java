@@ -13,6 +13,6 @@ public interface RoomBookDao extends BaseDao<RoomBookDO> {
 
     List<RoomVO> listBook(Page page,RoomDTO dto);
 
-    int countBook(RoomDTO dto);
+    RoomBookDO getByDto(RoomDTO dto);
 
 }
