@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-12-02 23:14:51
+Date: 2018-12-12 00:47:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,11 +47,11 @@ INSERT INTO `depts` VALUES ('16', '9', '客房一部', '0', '1');
 DROP TABLE IF EXISTS `dicts`;
 CREATE TABLE `dicts` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `name` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '标签名',
+  `name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '标签名',
   `value` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '数据值',
   `type` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '类型',
   `description` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '描述',
-  `sort` decimal(10,0) DEFAULT NULL COMMENT '排序（升序）',
+  `sort` int(10) DEFAULT NULL COMMENT '排序（升序）',
   `parent_id` bigint(64) DEFAULT '0' COMMENT '父级编号',
   `create_by` int(64) DEFAULT NULL COMMENT '创建者',
   `update_by` bigint(64) DEFAULT NULL COMMENT '更新者',
@@ -72,7 +72,7 @@ INSERT INTO `dicts` VALUES ('96', '男', '1', 'sex', '性别', '10', '0', '1', '
 INSERT INTO `dicts` VALUES ('97', '女', '2', 'sex', '性别', '20', '0', '1', '1', null, '0', '2018-12-02 20:28:15', '2018-12-02 20:28:20');
 INSERT INTO `dicts` VALUES ('1069224396955533313', '单人房', '1', 'roomType', '房间类别', '1', '0', null, null, '', '', null, null);
 INSERT INTO `dicts` VALUES ('1069224499950862338', '双人房', '2', 'roomType', '房间类别', '2', '0', null, null, '', '', null, null);
-INSERT INTO `dicts` VALUES ('1069224670533206018', '大床房', '3', 'roomType', '房间类别', null, '0', null, null, '', '', null, null);
+INSERT INTO `dicts` VALUES ('1069224670533206018', '大床房', '3', 'roomType', '房间类别', '3', '0', null, null, '', '', null, null);
 
 -- ----------------------------
 -- Table structure for logs
@@ -113,7 +113,7 @@ CREATE TABLE `menus` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `parent_id_index` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1069218489844580354 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=1069218489844580355 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
 
 -- ----------------------------
 -- Records of menus
@@ -152,38 +152,7 @@ INSERT INTO `menus` VALUES ('1069195942360989697', '1069194867235045377', '订�
 INSERT INTO `menus` VALUES ('1069217402081198082', '1069195455490375682', '新增', '', 'hotel:room:add', '2', '', '0', null, null);
 INSERT INTO `menus` VALUES ('1069217608248016898', '1069195455490375682', '编辑', '', 'hotel:room:edit', '2', '', '0', null, null);
 INSERT INTO `menus` VALUES ('1069218489844580353', '1069195455490375682', '删除', '', 'hotel:room:remove', '2', '', '0', null, null);
-
--- ----------------------------
--- Table structure for orders
--- ----------------------------
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `room_id` bigint(20) NOT NULL COMMENT '顾客姓名',
-  `customer_name` varchar(200) DEFAULT NULL,
-  `customer_gender` bigint(20) DEFAULT NULL COMMENT '顾客性别',
-  `customer_mobile` varchar(64) DEFAULT NULL COMMENT '顾客电话',
-  `customer_number_id` varchar(18) DEFAULT NULL COMMENT '顾客身份证',
-  `check_in_time` datetime DEFAULT NULL COMMENT '入住时间',
-  `check_out_time` datetime DEFAULT NULL COMMENT '离店时间',
-  `net_price` bigint(20) DEFAULT NULL COMMENT '实收价格(分)',
-  `expect_check_in_time` datetime DEFAULT NULL,
-  `expect_check_out_time` datetime DEFAULT NULL,
-  `expect_days` int(11) DEFAULT NULL COMMENT '预计天数',
-  `expect_price` decimal(10,0) DEFAULT NULL,
-  `net_days` int(11) DEFAULT NULL COMMENT '实际天数',
-  `fix_price` bigint(20) DEFAULT NULL COMMENT '固定价格（分）',
-  `foregift` bigint(20) DEFAULT NULL COMMENT '押金',
-  `status` tinyint(4) DEFAULT NULL,
-  `remark` text,
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- ----------------------------
--- Records of orders
--- ----------------------------
+INSERT INTO `menus` VALUES ('1069218489844580354', '1069195455490375682', '预定', '', 'hotel:room:book', '2', '', null, null, null);
 
 -- ----------------------------
 -- Table structure for roles
@@ -198,7 +167,7 @@ CREATE TABLE `roles` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='角色';
 
 -- ----------------------------
 -- Records of roles
@@ -215,46 +184,47 @@ CREATE TABLE `role_menu_xrefs` (
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint(20) DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4684 DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
+) ENGINE=InnoDB AUTO_INCREMENT=4720 DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
 
 -- ----------------------------
 -- Records of role_menu_xrefs
 -- ----------------------------
-INSERT INTO `role_menu_xrefs` VALUES ('4649', '1', '79');
-INSERT INTO `role_menu_xrefs` VALUES ('4650', '1', '80');
-INSERT INTO `role_menu_xrefs` VALUES ('4651', '1', '81');
-INSERT INTO `role_menu_xrefs` VALUES ('4652', '1', '83');
-INSERT INTO `role_menu_xrefs` VALUES ('4653', '1', '20');
-INSERT INTO `role_menu_xrefs` VALUES ('4654', '1', '21');
-INSERT INTO `role_menu_xrefs` VALUES ('4655', '1', '22');
-INSERT INTO `role_menu_xrefs` VALUES ('4656', '1', '61');
-INSERT INTO `role_menu_xrefs` VALUES ('4657', '1', '12');
-INSERT INTO `role_menu_xrefs` VALUES ('4658', '1', '13');
-INSERT INTO `role_menu_xrefs` VALUES ('4659', '1', '14');
-INSERT INTO `role_menu_xrefs` VALUES ('4660', '1', '24');
-INSERT INTO `role_menu_xrefs` VALUES ('4661', '1', '25');
-INSERT INTO `role_menu_xrefs` VALUES ('4662', '1', '26');
-INSERT INTO `role_menu_xrefs` VALUES ('4663', '1', '15');
-INSERT INTO `role_menu_xrefs` VALUES ('4664', '1', '55');
-INSERT INTO `role_menu_xrefs` VALUES ('4665', '1', '56');
-INSERT INTO `role_menu_xrefs` VALUES ('4666', '1', '62');
-INSERT INTO `role_menu_xrefs` VALUES ('4667', '1', '74');
-INSERT INTO `role_menu_xrefs` VALUES ('4668', '1', '75');
-INSERT INTO `role_menu_xrefs` VALUES ('4669', '1', '76');
-INSERT INTO `role_menu_xrefs` VALUES ('4670', '1', '1069195942360989697');
-INSERT INTO `role_menu_xrefs` VALUES ('4671', '1', '78');
-INSERT INTO `role_menu_xrefs` VALUES ('4672', '1', '1');
-INSERT INTO `role_menu_xrefs` VALUES ('4673', '1', '2');
-INSERT INTO `role_menu_xrefs` VALUES ('4674', '1', '6');
-INSERT INTO `role_menu_xrefs` VALUES ('4675', '1', '7');
-INSERT INTO `role_menu_xrefs` VALUES ('4676', '1', '73');
-INSERT INTO `role_menu_xrefs` VALUES ('4677', '1', '3');
-INSERT INTO `role_menu_xrefs` VALUES ('4678', '1', '1069195455490375682');
-INSERT INTO `role_menu_xrefs` VALUES ('4679', '1', '1069217402081198082');
-INSERT INTO `role_menu_xrefs` VALUES ('4680', '1', '1069217608248016898');
-INSERT INTO `role_menu_xrefs` VALUES ('4681', '1', '1069218489844580353');
-INSERT INTO `role_menu_xrefs` VALUES ('4682', '1', '1069194867235045377');
-INSERT INTO `role_menu_xrefs` VALUES ('4683', '1', '-1');
+INSERT INTO `role_menu_xrefs` VALUES ('4684', '1', '79');
+INSERT INTO `role_menu_xrefs` VALUES ('4685', '1', '80');
+INSERT INTO `role_menu_xrefs` VALUES ('4686', '1', '81');
+INSERT INTO `role_menu_xrefs` VALUES ('4687', '1', '83');
+INSERT INTO `role_menu_xrefs` VALUES ('4688', '1', '20');
+INSERT INTO `role_menu_xrefs` VALUES ('4689', '1', '21');
+INSERT INTO `role_menu_xrefs` VALUES ('4690', '1', '22');
+INSERT INTO `role_menu_xrefs` VALUES ('4691', '1', '61');
+INSERT INTO `role_menu_xrefs` VALUES ('4692', '1', '12');
+INSERT INTO `role_menu_xrefs` VALUES ('4693', '1', '13');
+INSERT INTO `role_menu_xrefs` VALUES ('4694', '1', '14');
+INSERT INTO `role_menu_xrefs` VALUES ('4695', '1', '24');
+INSERT INTO `role_menu_xrefs` VALUES ('4696', '1', '25');
+INSERT INTO `role_menu_xrefs` VALUES ('4697', '1', '26');
+INSERT INTO `role_menu_xrefs` VALUES ('4698', '1', '15');
+INSERT INTO `role_menu_xrefs` VALUES ('4699', '1', '55');
+INSERT INTO `role_menu_xrefs` VALUES ('4700', '1', '56');
+INSERT INTO `role_menu_xrefs` VALUES ('4701', '1', '62');
+INSERT INTO `role_menu_xrefs` VALUES ('4702', '1', '74');
+INSERT INTO `role_menu_xrefs` VALUES ('4703', '1', '75');
+INSERT INTO `role_menu_xrefs` VALUES ('4704', '1', '76');
+INSERT INTO `role_menu_xrefs` VALUES ('4705', '1', '1069217402081198082');
+INSERT INTO `role_menu_xrefs` VALUES ('4706', '1', '1069217608248016898');
+INSERT INTO `role_menu_xrefs` VALUES ('4707', '1', '1069218489844580353');
+INSERT INTO `role_menu_xrefs` VALUES ('4708', '1', '1069195942360989697');
+INSERT INTO `role_menu_xrefs` VALUES ('4709', '1', '78');
+INSERT INTO `role_menu_xrefs` VALUES ('4710', '1', '1');
+INSERT INTO `role_menu_xrefs` VALUES ('4711', '1', '2');
+INSERT INTO `role_menu_xrefs` VALUES ('4712', '1', '6');
+INSERT INTO `role_menu_xrefs` VALUES ('4713', '1', '7');
+INSERT INTO `role_menu_xrefs` VALUES ('4714', '1', '73');
+INSERT INTO `role_menu_xrefs` VALUES ('4715', '1', '3');
+INSERT INTO `role_menu_xrefs` VALUES ('4716', '1', '1069218489844580354');
+INSERT INTO `role_menu_xrefs` VALUES ('4717', '1', '1069195455490375682');
+INSERT INTO `role_menu_xrefs` VALUES ('4718', '1', '1069194867235045377');
+INSERT INTO `role_menu_xrefs` VALUES ('4719', '1', '-1');
 
 -- ----------------------------
 -- Table structure for rooms
@@ -270,7 +240,6 @@ CREATE TABLE `rooms` (
   `televioned` tinyint(4) DEFAULT NULL COMMENT '是否有电视',
   `has_toilet` tinyint(4) DEFAULT NULL COMMENT '是否有厕所',
   `price` bigint(20) DEFAULT NULL COMMENT '定价',
-  `status` tinyint(4) DEFAULT '0' COMMENT '房间状态 0 未入住 1已预订 2已入住 3待退房 4已退房待清扫',
   `remark` varchar(500) DEFAULT NULL,
   `enabled` tinyint(4) DEFAULT NULL,
   `crate_time` datetime DEFAULT NULL,
@@ -281,33 +250,75 @@ CREATE TABLE `rooms` (
 -- ----------------------------
 -- Records of rooms
 -- ----------------------------
-INSERT INTO `rooms` VALUES ('1069239163682226178', '301', '0', '1', '1', '1', '1', '1', '100', '0', null, '1', '2018-12-02 06:37:36', null);
-INSERT INTO `rooms` VALUES ('1069241341431971842', '302', '0', '1', '1', '1', '1', '1', '10000', '0', null, '1', '2018-12-02 06:46:15', null);
-INSERT INTO `rooms` VALUES ('1069243674425511937', '303', '1069224499950862338', '2', '1', '1', '1', '1', '18000', '0', null, '1', '2018-12-02 06:55:32', null);
+INSERT INTO `rooms` VALUES ('1069239163682226178', '301', '1069224396955533313', '1', '1', '1', '1', '1', '100', null, '1', '2018-12-02 06:37:36', '2018-12-08 18:54:30');
+INSERT INTO `rooms` VALUES ('1069241341431971842', '302', '1069224670533206018', '1', '1', '0', '1', '1', '10000', null, '1', '2018-12-02 06:46:15', '2018-12-08 18:54:44');
+INSERT INTO `rooms` VALUES ('1069243674425511937', '303', '1069224499950862338', '2', '1', '1', '1', '1', '18000', null, '1', '2018-12-02 06:55:32', null);
 
 -- ----------------------------
 -- Table structure for room_bookings
 -- ----------------------------
 DROP TABLE IF EXISTS `room_bookings`;
 CREATE TABLE `room_bookings` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` bigint(20) NOT NULL COMMENT '房间编号',
   `customer_name` varchar(200) DEFAULT NULL,
   `customer_mobile` varchar(64) DEFAULT NULL,
-  `keep_time` int(11) DEFAULT NULL COMMENT '保留时间(小时)',
-  `expect_time` datetime DEFAULT NULL COMMENT '预期时间',
+  `book_date` date DEFAULT NULL COMMENT '预期日期',
+  `keep_time` datetime DEFAULT NULL COMMENT '保留时间',
   `arrival_time` datetime DEFAULT NULL COMMENT '到达时间',
   `departure_time` datetime DEFAULT NULL COMMENT '离开时间',
   `sumtimes` int(11) DEFAULT NULL COMMENT '共时',
   `enabled` tinyint(4) DEFAULT NULL COMMENT '是否有效',
   `remark` varchar(500) DEFAULT NULL,
-  `status` tinyint(4) DEFAULT NULL COMMENT '0 已预订 1已抵达 2未抵达',
+  `status` tinyint(4) DEFAULT NULL COMMENT '1已预订 2已入住 3待退房 4已退房待清扫 0 noshow',
   `create_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `room_index` (`room_id`,`book_date`,`enabled`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of room_bookings
+-- ----------------------------
+INSERT INTO `room_bookings` VALUES ('1', '1069239163682226178', '张三', '15874859685', '2018-12-09', '2018-12-11 15:00:00', '2018-12-10 12:00:00', '2018-12-11 06:00:00', null, '0', '', '1', '2018-12-09 08:02:42');
+INSERT INTO `room_bookings` VALUES ('2', '1069241341431971842', '张三', '15874859685', '2018-12-09', '2018-12-10 15:00:00', '2018-12-10 02:00:00', '2018-12-11 06:00:00', null, '0', '', '0', '2018-12-09 08:08:40');
+INSERT INTO `room_bookings` VALUES ('3', '1069243674425511937', '李四', '15857458965', '2018-12-09', '2018-12-11 12:00:00', '2018-12-11 02:00:00', '2018-12-11 16:00:00', null, '0', '', '0', '2018-12-10 08:47:56');
+INSERT INTO `room_bookings` VALUES ('4', '1069239163682226178', '张三', '15874859685', '2018-12-10', '2018-12-12 12:00:00', '2018-12-12 02:00:00', '2018-12-13 06:00:00', null, '0', '', '0', '2018-12-11 07:31:48');
+INSERT INTO `room_bookings` VALUES ('5', '1069239163682226178', '张三', '15874859685', '2018-12-10', '2018-12-12 15:00:00', '2018-12-12 12:00:00', '2018-12-13 06:00:00', null, '0', '', '0', '2018-12-11 07:35:44');
+INSERT INTO `room_bookings` VALUES ('6', '1069239163682226178', '张三', '15874859685', '2018-12-10', '2018-12-12 04:00:00', '2018-12-12 02:00:00', '2018-12-13 06:00:00', null, '0', '', '0', '2018-12-11 07:44:05');
+INSERT INTO `room_bookings` VALUES ('7', '1069239163682226178', '张三', '15874859685', '2018-12-13', '2018-12-15 07:00:00', '2018-12-15 02:00:00', '2018-12-16 06:00:00', null, '0', '', '0', '2018-12-11 08:10:59');
+INSERT INTO `room_bookings` VALUES ('8', '1069239163682226178', '张三', '15874859685', '2018-12-13', '2018-12-15 04:00:00', '2018-12-14 18:00:00', '2018-12-16 06:00:00', null, '0', '', '0', '2018-12-11 08:13:52');
+INSERT INTO `room_bookings` VALUES ('9', '1069239163682226178', '张三', '15874859685', '2018-12-14', '2018-12-14 22:00:00', '2018-12-14 18:00:00', '2018-12-16 06:00:00', null, '1', '', '1', '2018-12-11 08:20:51');
+
+-- ----------------------------
+-- Table structure for room_orders
+-- ----------------------------
+DROP TABLE IF EXISTS `room_orders`;
+CREATE TABLE `room_orders` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `room_id` bigint(20) NOT NULL COMMENT '顾客姓名',
+  `customer_name` varchar(200) DEFAULT NULL,
+  `customer_gender` bigint(20) DEFAULT NULL COMMENT '顾客性别',
+  `customer_mobile` varchar(64) DEFAULT NULL COMMENT '顾客电话',
+  `customer_number_id` varchar(18) DEFAULT NULL COMMENT '顾客身份证',
+  `check_in_date` date DEFAULT NULL COMMENT '入住时间',
+  `check_out_date` date DEFAULT NULL COMMENT '离店时间',
+  `net_day` int(11) DEFAULT NULL COMMENT '实际天数',
+  `net_price` bigint(20) DEFAULT NULL COMMENT '实收价格(分)',
+  `expect_check_in_date` date DEFAULT NULL,
+  `expect_check_out_date` date DEFAULT NULL,
+  `expect_day` int(11) DEFAULT NULL COMMENT '预计天数',
+  `expect_price` decimal(10,0) DEFAULT NULL,
+  `unit_price` bigint(20) DEFAULT NULL COMMENT '单价（分）',
+  `foregift` bigint(20) DEFAULT NULL COMMENT '押金',
+  `status` tinyint(4) DEFAULT NULL,
+  `remark` text,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of room_orders
 -- ----------------------------
 
 -- ----------------------------
