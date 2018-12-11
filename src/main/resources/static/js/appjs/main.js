@@ -1,19 +1,20 @@
-room = {};
-
 var app = new Vue({
     el: '#app',
     data: {
-        name:'',
+        name: '',
+        bookDate: '',
         total: 0,
         rooms: '',
-        pageInfo : {},
-        pageNumber:1,
+        pageInfo: {},
+        pageNumber: 1,
         pageSize: 12,
     },
     methods: {
         getData: function () {
+            this.bookDate = $("#bookDate").val();
             $.getJSON("/hotel/room/book/list", {
-                name:this.name,
+                name: this.name,
+                bookDate: this.bookDate,
                 pageNumber: this.pageNumber,
                 pageSize: this.pageSize
             }, function (r) {
@@ -55,13 +56,38 @@ var app = new Vue({
         },
         reserve: function (id) {
             layer.open({
-                type : 2,
-                title : '预定',
-                maxmin : true,
-                shadeClose : false, // 点击遮罩关闭层
-                area : [ '800px', '520px' ],
-                content : 'hotel/room/book/get/'+id
+                type: 2,
+                title: '预定',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['800px', '520px'],
+                content: 'hotel/room/book/get/' + id
             });
+        },
+        noshow: function (id) {
+            layer.confirm("确认客人未抵达？", {
+                btn: ['确认', '取消']
+            }, function () {
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url: "/hotel/room/book/noshow/" + id,
+                    async: false,
+                    error: function (request) {
+                        alert("Connection error");
+                    },
+                    success: function (data) {
+                        if (data.code == 0) {
+                            layer.msg(data.msg)
+                            reLoad();
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    }
+                });
+            }, function () {
+                //
+            })
         }
     },
     created: function () {

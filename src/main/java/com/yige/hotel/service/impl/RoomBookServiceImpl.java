@@ -15,6 +15,7 @@ import com.yige.hotel.enums.Enabled;
 import com.yige.hotel.enums.RoomBookStatus;
 import com.yige.hotel.service.RoomBookService;
 import com.yige.hotel.vo.RoomVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +92,7 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
 
     @SuppressWarnings("unchecked")
     public Page<RoomVO> listBook(Page page,RoomDTO dto) {
-        if(Objects.isNull(dto.getBookDate())){
+        if(StringUtils.isBlank(dto.getBookDate())){
             dto.setBookDate(DateHelpers.today().toString());
         }
         List<RoomVO> vos = this.baseMapper.listBook(page,dto);

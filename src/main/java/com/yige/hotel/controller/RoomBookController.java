@@ -39,11 +39,11 @@ public class RoomBookController extends AdminBaseController {
      */
     @Log("预定房间")
     @ResponseBody
-    @PostMapping("/add/{id}")
+    @PostMapping("/add/{roomId}")
     @RequiresPermissions("hotel:room:book")
-    public Result<String> add(@PathVariable("id") Long id, RoomBookDO roomBookDO) {
+    public Result<String> add(@PathVariable("roomId") Long roomId, RoomBookDO roomBookDO) {
         try{
-            RoomDO roomDO = roomService.require(id);
+            RoomDO roomDO = roomService.require(roomId);
             roomBookService.booking(roomBookDO, roomDO);
         }catch (Exception e){
             return Result.build(Result.fail().getCode(),String.format("预定异常:%s",e.getMessage()));
@@ -68,6 +68,16 @@ public class RoomBookController extends AdminBaseController {
     Result<Page<RoomVO>> list(RoomDTO dto) {
         Page<RoomVO> page = roomBookService.listBook(getPage(RoomVO.class),dto);
         return Result.ok(page);
+    }
+
+    @Log("客人noshow")
+    @RequiresPermissions("hotel:room:book")
+    @RequestMapping("/noshow/{id}")
+    @ResponseBody
+    Result<Page<RoomVO>> noshow(@PathVariable("id") Long id) {
+        RoomBookDO roomBookDO = roomBookService.require(id);
+        roomBookService.noshow(roomBookDO);
+        return Result.ok();
     }
 
 }

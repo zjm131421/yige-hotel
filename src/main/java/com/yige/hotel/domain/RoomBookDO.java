@@ -3,6 +3,7 @@ package com.yige.hotel.domain;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @Data
 public class RoomBookDO extends Model<RoomBookDO> implements Serializable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     private Long roomId;
     private String customerName;
@@ -35,6 +36,7 @@ public class RoomBookDO extends Model<RoomBookDO> implements Serializable {
     private String remark;
     private Integer enabled;
     private Integer status;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
 
