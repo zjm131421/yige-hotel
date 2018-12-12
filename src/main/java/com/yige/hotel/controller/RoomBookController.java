@@ -80,4 +80,13 @@ public class RoomBookController extends AdminBaseController {
         return Result.ok();
     }
 
+    @Log("进入入住页面")
+    @GetMapping("/open/{id}")
+    @RequiresPermissions("hotel:room:book")
+    String open(@PathVariable("id") Long id, Model model) {
+        RoomDO roomDO = roomService.require(id);
+        model.addAttribute("room", roomDO);
+        return PREFIX + "/open";
+    }
+
 }

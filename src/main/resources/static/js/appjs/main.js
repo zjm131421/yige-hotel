@@ -64,6 +64,16 @@ var app = new Vue({
                 content: 'hotel/room/book/get/' + id
             });
         },
+        open:function (id) {
+            layer.open({
+                type: 2,
+                title: '入住',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['800px', '520px'],
+                content: 'hotel/room/book/open/' + id
+            });
+        },
         noshow: function (id) {
             layer.confirm("确认客人未抵达？", {
                 btn: ['确认', '取消']

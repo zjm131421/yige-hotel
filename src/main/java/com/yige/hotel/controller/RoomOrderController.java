@@ -11,4 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/hotel/room/order")
 @Controller
 public class RoomOrderController extends AdminBaseController {
+
+
+
 }
