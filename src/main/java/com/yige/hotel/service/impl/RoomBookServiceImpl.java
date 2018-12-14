@@ -10,6 +10,7 @@ import com.yige.common.service.impl.DictServiceImpl;
 import com.yige.hotel.dao.RoomBookDao;
 import com.yige.hotel.domain.RoomBookDO;
 import com.yige.hotel.domain.RoomDO;
+import com.yige.hotel.domain.RoomOrderDO;
 import com.yige.hotel.dto.RoomDTO;
 import com.yige.hotel.enums.Enabled;
 import com.yige.hotel.enums.RoomBookStatus;
@@ -68,11 +69,48 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         return roomBookDO;
     }
 
+    public RoomBookDO checkIn(RoomOrderDO roomOrderDO){
+        Optional<RoomBookDO> optionalBookDO = get(roomOrderDO.getBookId());
+        return optionalBookDO.map(roomBookDO -> {
+            roomBookDO.setStatus(RoomBookStatus.YRZ.getCode());
+            return roomBookDO;
+        }).orElseGet(() -> {
+            RoomBookDO roomBookDO = initCheckIn(roomOrderDO);
+            validateBook(roomBookDO);
+            this.baseMapper.insert(roomBookDO);
+            roomOrderDO.setBookId(roomBookDO.getId());
+            return roomBookDO;
+        });
+    }
+
+    private RoomBookDO initCheckIn(RoomOrderDO roomOrderDO) {
+        RoomBookDO roomBookDO = new RoomBookDO();
+        roomBookDO.setId(roomOrderDO.getBookId());
+        roomBookDO.setRoomId(roomOrderDO.getRoomId());
+        roomBookDO.setCustomerName(roomOrderDO.getCustomerName());
+        roomBookDO.setCustomerMobile(roomOrderDO.getCustomerMobile());
+        roomBookDO.setBookDate(roomOrderDO.getExpectCheckInDate());
+        roomBookDO.setKeepTime(roomOrderDO.getExpectCheckInDate().atTime(DateHelpers.now().toLocalTime()));
+        roomBookDO.setArrivalTime(DateHelpers.now());
+        roomBookDO.setDepartureTime(roomOrderDO.getExpectCheckOutDate().atTime(DateHelpers.parseTime("14:00")));
+        roomBookDO.setEnabled(Enabled.YX.getCode());
+        roomBookDO.setRemark(roomOrderDO.getRemark());
+        roomBookDO.setStatus(RoomBookStatus.YRZ.getCode());
+        roomBookDO.setCreateTime(DateHelpers.now());
+        return roomBookDO;
+    }
+
     private void validateBook(RoomBookDO roomBookDO) {
         Optional<RoomBookDO> optionalBookDO = getByBookDate(roomBookDO.getRoomId(), roomBookDO.getBookDate().toString());
-        if(optionalBookDO.isPresent()){
-            throw new GeneralException(String.format("该房间状态不正确：%s,无法预订",optionalBookDO.get().getStatus()));
-        }
+        optionalBookDO.ifPresent(bookDo -> {
+            if(RoomBookStatus.YYD.getCode() == bookDo.getStatus()){
+                    throw new GeneralException(String.format("该房间在%s已被%s预定",bookDo.getBookDate(),bookDo.getCustomerName()));
+            }
+            if(RoomBookStatus.YRZ.getCode() == bookDo.getStatus()){
+                throw new GeneralException("该房间已有人入住");
+            }
+        });
+
     }
 
     public RoomBookDO noshow(RoomBookDO roomBookDO){

@@ -81,6 +81,9 @@ function validateRule() {
             },
             customerNumberId: {
                 required: true
+            },
+            airConditioned:{
+                required: true
             }
         },
         message: {
@@ -88,7 +91,10 @@ function validateRule() {
                 required: icon + "请输入预订人"
             },
             customerNumberId: {
-                require: icon + "请输入预订手机号"
+                require: icon + "请输入预订人身份证号"
+            },
+            airConditioned: {
+                require: icon + "请选择入住人性别"
             }
         }
     })

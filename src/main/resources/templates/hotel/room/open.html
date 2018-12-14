@@ -9,6 +9,7 @@
             <div class="ibox-content">
                 <form class="form-horizontal m-t" id="signupForm">
                     <input id="roomId" name="roomId" type="hidden" th:value="${room.id}"/>
+                    <input id="bookId" name="bookId" type="hidden" th:value="${bookId}"/>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">房间名称： </label>
                         <label class="col-sm-1 control-label" th:text="${room.name}"></label>
@@ -19,6 +20,14 @@
                         <label class="col-sm-3 control-label">入住人：</label>
                         <div class="col-sm-8">
                             <input id="customerName" name="customerName" class="form-control" type="text" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别：</label>
+                        <div class="col-sm-8" >
+                            <label class="radio-inline" th:each="sex:${sexList}">
+                                <input type="radio" name="airConditioned" th:value="${sex.id}" th:text="${sex.name}"/>
+                            </label>
                         </div>
                     </div>
                     <div class="form-group">

@@ -102,9 +102,10 @@ var app = new Vue({
     },
     created: function () {
         this.getData();
+    },
+    mounted:function () {
+        $("#bookDate").val(moment().format("YYYY-MM-DD"));
     }
-
-
 });
 
 function reLoad() {

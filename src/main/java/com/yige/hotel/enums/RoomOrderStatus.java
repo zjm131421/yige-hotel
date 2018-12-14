@@ -1,24 +1,20 @@
 package com.yige.hotel.enums;
 
 /**
- * 房间状态枚举
  * @author zoujm
- * @since 2018/12/2 17:52
+ * @since 2018/12/13 10:57
  */
-public enum RoomBookStatus {
+public enum RoomOrderStatus {
 
-    WRZ(0,"未入住"),
-    YYD(1,"已预订"),
-    YRZ(2,"已入住"),
-    YTF(3,"已退房"),
-
+    CSZT(0,"初始"),
+    WJZT(1,"完结状态")
     ;
 
     private int code;
     private String name;
 
-    RoomBookStatus(int bh, String name) {
-        this.code = bh;
+    RoomOrderStatus(int code, String name) {
+        this.code = code;
         this.name = name;
     }
 

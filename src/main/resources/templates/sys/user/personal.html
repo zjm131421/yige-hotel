@@ -39,8 +39,8 @@
                                 </div>
                                 <div class="gg-formDetail">
                                     <div class="radio i-checks">
-                                        <label class="radio-inline" th:each="sex:${sexList}"> <input
-                                                th:field="*{user.sex}" type="radio" name="sex" th:value="${sex.id}" th:text="${sex.name}"/>
+                                        <label class="radio-inline" th:each="sex:${sexList}">
+                                            <input th:field="*{user.sex}" type="radio" name="sex" th:value="${sex.id}" th:text="${sex.name}"/>
                                         </label>
                                     </div>
                                 </div>

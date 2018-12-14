@@ -3,6 +3,8 @@ package com.yige.hotel.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yige.common.annotation.Log;
 import com.yige.common.base.AdminBaseController;
+import com.yige.common.domain.DictDO;
+import com.yige.common.service.DictService;
 import com.yige.common.utils.Result;
 import com.yige.hotel.domain.RoomBookDO;
 import com.yige.hotel.domain.RoomDO;
@@ -18,7 +20,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author zoujm
@@ -32,6 +38,8 @@ public class RoomBookController extends AdminBaseController {
     private RoomBookServiceImpl roomBookService;
     @Autowired
     private RoomServiceImpl roomService;
+    @Autowired
+    private DictService dictService;
 
     private static final String PREFIX = "hotel/room";
     /**
@@ -84,8 +92,13 @@ public class RoomBookController extends AdminBaseController {
     @GetMapping("/open/{id}")
     @RequiresPermissions("hotel:room:book")
     String open(@PathVariable("id") Long id, Model model) {
-        RoomDO roomDO = roomService.require(id);
+        Optional<RoomBookDO> optionalBookDO = roomBookService.get(id);
+        Long roomId = optionalBookDO.map(RoomBookDO::getRoomId).orElse(id);
+        RoomDO roomDO = roomService.require(roomId);
         model.addAttribute("room", roomDO);
+        optionalBookDO.ifPresent(roomBookDO -> model.addAttribute("bookId",roomBookDO.getId()));
+        List<DictDO> sexList = dictService.getListByType("sex");
+        model.addAttribute("sexList", sexList);
         return PREFIX + "/open";
     }
 

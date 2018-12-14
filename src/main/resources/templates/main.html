@@ -65,7 +65,7 @@
                                                 <!--&nbsp;-->
                                                 <!--<button class="btn btn-success btn-xs">预定</button>-->
                                                 <!--&nbsp;-->
-                                                <button class="btn btn-primary btn-xs" @click="open(room.roomId)">入住</button>
+                                                <button class="btn btn-primary btn-xs" @click="open(room.bookId)">入住</button>
                                                 <!--&nbsp;-->
                                                 <!--<button class="btn btn-info btn-xs">换房</button>-->
                                                 <!--&nbsp;-->
@@ -80,47 +80,24 @@
                                         <a href="#">
                                             <span class="corner"></span>
                                             <div class="image">
-
+                                                <img class="img-preview-sm" src="/img/room_bg.png">
                                             </div>
                                             <div class="file-name">
                                                 <br/>
                                                 <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             &nbsp;
-                                            <button class="btn btn-success btn-xs">预定</button>
+                                            <!--<button class="btn btn-success btn-xs">预定</button>-->
                                             &nbsp;
-                                            <button class="btn btn-primary btn-xs">入住</button>
+                                            <!--<button class="btn btn-primary btn-xs">入住</button>-->
                                             &nbsp;
-                                            <button class="btn btn-info btn-xs">换房</button>
+                                            <button class="btn btn-info btn-xs" @click="change(room.bookId)">换房</button>
                                             &nbsp;
-                                            <button class="btn btn-danger btn-xs">退房</button>
+                                            <button class="btn btn-danger btn-xs" @click="checkOut(room.bookId)">退房</button>
                                         </a>
                                     </div>
                                 </template>
                                 <template v-else-if="room.status == 3">
-                                    <!--待退房-->
-                                    <div class="file" style="background-color:#69480d;">
-                                        <a href="#">
-                                            <span class="corner"></span>
-                                            <div class="image">
-
-                                            </div>
-                                            <div class="file-name">
-                                                <br/>
-                                                <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
-                                            </div>
-                                            &nbsp;
-                                            <button class="btn btn-success btn-xs">预定</button>
-                                            &nbsp;
-                                            <button class="btn btn-primary btn-xs">入住</button>
-                                            &nbsp;
-                                            <button class="btn btn-info btn-xs">换房</button>
-                                            &nbsp;
-                                            <button class="btn btn-danger btn-xs">退房</button>
-                                        </a>
-                                    </div>
-                                </template>
-                                <template v-else-if="room.status == 4">
                                     <!--已退房待请扫-->
                                     <div class="file" style="background-color:#cc2222;">
                                         <a href="#">
@@ -133,13 +110,7 @@
                                                 <small>{{room.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{room.typeName}}</small>
                                             </div>
                                             &nbsp;
-                                            <button class="btn btn-success btn-xs">预定</button>
-                                            &nbsp;
-                                            <button class="btn btn-primary btn-xs">入住</button>
-                                            &nbsp;
-                                            <button class="btn btn-info btn-xs">换房</button>
-                                            &nbsp;
-                                            <button class="btn btn-danger btn-xs">退房</button>
+                                            <button class="btn btn-success btn-xs" @click="clear(room.bookId)">清扫</button>
                                         </a>
                                     </div>
                                 </template>

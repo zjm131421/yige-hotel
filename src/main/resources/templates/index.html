@@ -33,24 +33,6 @@
                             </i>一格酒店管理系统
                         </h3>
                     </div>
-                    <div class="dropdown profile-element hidden">
-
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
-                                class="clear"> <span class="block m-t-xs"><strong
-                                class="font-bold" th:text="${username}">admin</strong></span> <span
-                                class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
-							</span>
-                        </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a @click="personal" href="#">修改头像</a></li>
-                            <li><a @click="personal" href="#">个人资料</a></li>
-                            <li><a @click="personal" href="#">密码修改</a></li>
-                            <li><a @click="personal" href="#">信箱</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/logout">安全退出</a></li>
-                        </ul>
-                        <div class="logo-element">IFast</div>
-                    </div>
                 </li>
                 <li>
                     <a href="#">
@@ -59,8 +41,8 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a id="index001" class="J_menuItem" href="index.html" data-index="0" th:href="@{/main}">关于
-                                IFast</a>
+                            <a id="index001" class="J_menuItem" href="index.html" data-index="0" th:href="@{/main}">
+                                前台预定</a>
                         </li>
                     </ul>
                 </li>
@@ -113,7 +95,7 @@
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
                     <a href="javascript:;" class="active J_menuTab"
-                       data-id="index.html">首页</a>
+                       data-id="index.html">前台</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight">
