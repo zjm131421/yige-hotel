@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
 
     @Autowired
     private DictServiceImpl dictService;
+    @Autowired
+    private RoomServiceImpl roomService;
 
     public RoomBookDO require(Long id){
         if(Objects.isNull(id)){
@@ -69,10 +72,31 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         return roomBookDO;
     }
 
+    public RoomBookDO change(Long id,Long orderId){
+        RoomBookDO roomBookDO = require(id);
+        roomBookDO.setOrderId(orderId);
+        this.updateById(roomBookDO);
+        return roomBookDO;
+    }
+
+    public RoomBookDO checkOut(RoomOrderDO roomOrderDO){
+        RoomBookDO roomBookDO = require(roomOrderDO.getBookId());
+        roomBookDO.setDepartureTime(DateHelpers.now());
+        roomBookDO.setSumtimes((int) roomBookDO.getArrivalTime().until(roomBookDO.getDepartureTime(),ChronoUnit.HOURS));
+        roomBookDO.setEnabled(Enabled.WX.getCode());
+        roomBookDO.setStatus(RoomBookStatus.YTF.getCode());
+        this.baseMapper.updateById(roomBookDO);
+        return roomBookDO;
+    }
+
     public RoomBookDO checkIn(RoomOrderDO roomOrderDO){
         Optional<RoomBookDO> optionalBookDO = get(roomOrderDO.getBookId());
         return optionalBookDO.map(roomBookDO -> {
+            roomBookDO.setArrivalTime(DateHelpers.now());
+            roomBookDO.setOrderId(roomOrderDO.getId());
+            roomBookDO.setRoomId(roomOrderDO.getRoomId());
             roomBookDO.setStatus(RoomBookStatus.YRZ.getCode());
+            this.updateById(roomBookDO);
             return roomBookDO;
         }).orElseGet(() -> {
             RoomBookDO roomBookDO = initCheckIn(roomOrderDO);
@@ -87,6 +111,7 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         RoomBookDO roomBookDO = new RoomBookDO();
         roomBookDO.setId(roomOrderDO.getBookId());
         roomBookDO.setRoomId(roomOrderDO.getRoomId());
+        roomBookDO.setOrderId(roomOrderDO.getId());
         roomBookDO.setCustomerName(roomOrderDO.getCustomerName());
         roomBookDO.setCustomerMobile(roomOrderDO.getCustomerMobile());
         roomBookDO.setBookDate(roomOrderDO.getExpectCheckInDate());
@@ -120,6 +145,12 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         return roomBookDO;
     }
 
+    public RoomBookDO clear(RoomBookDO roomBookDO){
+        roomBookDO.setEnabled(Enabled.WX.getCode());
+        this.updateById(roomBookDO);
+        return roomBookDO;
+    }
+
     private void initBook(RoomBookDO roomBookDO,RoomDO roomDO) {
         roomBookDO.setStatus(RoomBookStatus.YYD.getCode());
         roomBookDO.setCreateTime(DateHelpers.now());
@@ -141,6 +172,8 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
             optionalBookDO.ifPresent(roomBookDO ->
                 roomVO.setStatus(roomBookDO.getStatus())
             );
+            RoomDO roomDO = roomService.require(roomVO.getRoomId());
+            roomVO.setPrice(roomDO.getPrice());
         });
         page.setRecords(vos);
         return page;

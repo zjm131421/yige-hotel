@@ -2,19 +2,20 @@ package com.yige.hotel.enums;
 
 /**
  * @author zoujm
- * @since 2018/12/13 10:57
+ * @since 2018/12/17 1:43
  */
-public enum RoomOrderStatus {
+public enum  Payments {
 
-    CSZT(0,"初始"),
-    WJZT(1,"完结状态"),
-    HFZT(2,"换房")
+    CASH(1,"现金"),
+    ALIPAY(2,"支付宝"),
+    WECHAT(3,"微信"),
+
     ;
 
     private int code;
     private String name;
 
-    RoomOrderStatus(int code, String name) {
+    Payments(int code, String name) {
         this.code = code;
         this.name = name;
     }

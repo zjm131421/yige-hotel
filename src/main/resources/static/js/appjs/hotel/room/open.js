@@ -48,6 +48,7 @@ $.validator.setDefaults({
 
 function open() {
     var roomId = $("#roomId").val();
+    $("#foregift").val($("#foregift").val() * 100);
     $.ajax({
         cache: true,
         type: "POST",

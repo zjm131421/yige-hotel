@@ -21,6 +21,9 @@
             <if test='roomId !=null and roomId !=""'>
                 and room_id = #{roomId}
             </if>
+            <if test='type !=null and type !=""'>
+                and type = #{type}
+            </if>
         </where>
     </select>
 

@@ -22,6 +22,7 @@ public class RoomBookDO extends Model<RoomBookDO> implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long roomId;
+    private Long orderId;
     private String customerName;
     private String customerMobile;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -74,6 +74,51 @@ var app = new Vue({
                 content: 'hotel/room/book/open/' + id
             });
         },
+        change:function(id) {
+            layer.open({
+                type: 2,
+                title: '换房',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['800px', '520px'],
+                content: 'hotel/room/book/change/' + id
+            });
+        },
+        checkOut:function(id){
+            layer.open({
+                type: 2,
+                title: '退房',
+                maxmin: true,
+                shadeClose: false, // 点击遮罩关闭层
+                area: ['800px', '520px'],
+                content: 'hotel/room/book/checkOut/' + id
+            });
+        },
+        clear:function(id){
+            layer.confirm("确认房间清扫完毕？", {
+                btn: ['确认', '取消']
+            }, function () {
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url: "/hotel/room/book/clear/" + id,
+                    async: false,
+                    error: function (request) {
+                        alert("Connection error");
+                    },
+                    success: function (data) {
+                        if (data.code == 0) {
+                            layer.msg(data.msg)
+                            reLoad();
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    }
+                });
+            }, function () {
+                //
+            })
+        },
         noshow: function (id) {
             layer.confirm("确认客人未抵达？", {
                 btn: ['确认', '取消']

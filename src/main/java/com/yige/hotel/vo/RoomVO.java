@@ -10,6 +10,7 @@ import lombok.Data;
 public class RoomVO {
 
     private Long roomId;
+    private Long price;
     private String name;
     private Long type;
     private String typeName;

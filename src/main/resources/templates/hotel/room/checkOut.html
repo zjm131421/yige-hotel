@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm">
+                    <input id="bookId" name="bookId" type="hidden" th:value="${book.Id}"/>
+                    <input id="orderId" name="orderId" type="hidden" th:value="${order.Id}"/>
+                    <input id="orders" name="orders" type="hidden" th:value="${orders}"/>
+                    <input id="checkOutDate" name="checkOutDate" type="hidden" th:value="${order.checkOutDate}"/>
+                    <!--<input id="order" name="order" type="hidden" th:value="${order}"/>-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">房间名称： </label>
+                        <label class="col-sm-1 control-label" th:text="${order.roomName}"></label>
+                        <label class="col-sm-2 control-label">离店日期： </label>
+                        <label class="col-sm-2 control-label" th:text="${order.checkOutDate}"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">押金： </label>
+                        <label class="col-sm-1 control-label" th:text="${#numbers.formatDecimal(order.foregift/100,0,2)}"></label>
+                        <label class="col-sm-2 control-label">应收金额： </label>
+                        <div class="col-sm-2">
+                            <input type="number" step="1" class="form-control" id="netPrice" name="netPrice" th:value="${netPrice/100}"  />
+                        </div>
+                        <label class="col-sm-2 control-label">支付方式： </label>
+                        <div class="col-sm-3">
+                            <select data-placeholder="选择支付方式" class="form-control chosen-select"
+                                    id="payment" name="payment" tabindex="2" style="width: 80%" >
+                                <option value="1">现金</option>
+                                <option value="2">支付宝</option>
+                                <option value="3">微信</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>房间名称</th>
+                            <th>入住时间</th>
+                            <th>离店时间</th>
+                            <th>单价</th>
+                            <th>天数</th>
+                            <th>总价</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.roomName}"></td>
+                            <td th:text="${order.checkInDate}"></td>
+                            <td th:text="${order.checkOutDate}"></td>
+                            <td th:text="${#numbers.formatDecimal(order.unitPrice/100,0,2)}"></td>
+                            <td th:text="${order.netDay}"></td>
+                            <td th:text="${#numbers.formatDecimal(order.netPrice/100,0,2)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-5">
+                            <button type="submit" class="btn btn-primary" >确认</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/js/layui.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/vue.min.js"></script>
+<script type="text/javascript" src="/js/appjs/hotel/room/checkOut.js"></script>
+</body>
+</html>

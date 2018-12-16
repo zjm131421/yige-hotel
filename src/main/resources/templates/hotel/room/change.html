@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm">
+                    <!--<input id="roomId" name="roomId" type="hidden" th:value="${room.id}"/>-->
+                    <input id="bookId" name="bookId" type="hidden" th:value="${order.bookId}"/>
+                    <input id="orderId" name="orderId" type="hidden" th:value="${order.Id}"/>
+                    <input id="expectCheckInDate" name="expectCheckInDate" type="hidden" th:value="${changeDate}"/>
+                    <input id="expectCheckOutDate" name="expectCheckOutDate" type="hidden" th:value="${order.expectCheckOutDate}"/>
+                    <div class="form-group">
+                        <label class="layui-text">换出房间 </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 ">房间名称： </label>
+                        <label class="col-sm-3" th:text="${room.name}"></label>
+                        <label class="col-sm-2 ">价格： </label>
+                        <label class="col-sm-3" th:text="${#numbers.formatDecimal(room.price/100,0,2)}"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 ">换房日期： </label>
+                        <label class="col-sm-3" th:text="${changeDate}"></label>
+                        <label class="col-sm-2 ">离店日期： </label>
+                        <label class="col-sm-3 " th:text="${order.expectCheckOutDate}"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="layui-text">换入房间 </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">房间类别：</label>
+                        <div class="col-sm-3">
+                            <select data-placeholder="选择类别" class="form-control" onchange="initRoomList()"
+                                    id="type" name="type" tabindex="2" style="width: 80%" >
+                            </select>
+                        </div>
+                        <label class="col-sm-2 control-label">房间名称：</label>
+                        <div class="col-sm-3">
+                            <select data-placeholder="选择房间" class="form-control chosen-select"
+                                    id="roomId" name="roomId" tabindex="2" style="width: 80%" onchange="changePrice()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">房价：</label>
+                        <div class="col-sm-8">
+                            <input type="number" step="1" class="form-control" id="price" name="unitPrice"  />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <textarea id="remark" name="remark" class="body-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-offset-5">
+                            <button type="submit" class="btn btn-primary" >确认</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="include::footer"></div>
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/js/layui.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/vue.min.js"></script>
+<script type="text/javascript" src="/js/appjs/hotel/room/change.js">
+</script>
+</body>
+</html>

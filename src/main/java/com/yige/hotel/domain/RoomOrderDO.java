@@ -22,14 +22,15 @@ public class RoomOrderDO extends Model<RoomOrderDO> implements Serializable {
     private Long id;
     private Long roomId;
     private Long bookId;
+    private String roomName;
     private String customerName;
     private String customerGender;
     private String customerMobile;
     private String customerNumberId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate checkInTime;
+    private LocalDate checkInDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate checkOutTime;
+    private LocalDate checkOutDate;
     private Integer netDay;
     private Long netPrice;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -40,6 +41,7 @@ public class RoomOrderDO extends Model<RoomOrderDO> implements Serializable {
     private Integer expectDay;
     private Long unitPrice;
     private Long foregift;
+    private Integer payment;
     private Integer status;
     private String remark;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

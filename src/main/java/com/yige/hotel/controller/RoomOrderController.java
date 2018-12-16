@@ -47,4 +47,33 @@ public class RoomOrderController extends AdminBaseController {
         return Result.ok();
     }
 
+    @Log("换房")
+    @ResponseBody
+    @PostMapping("/chage/{orderId}")
+    @RequiresPermissions("hotel:room:in")
+    public Result<String> chage(@PathVariable("orderId") Long orderId,RoomOrderDO data){
+        try {
+            RoomOrderDO roomOrderDO = roomOrderService.require(orderId);
+            RoomDO roomDO = roomService.require(data.getRoomId());
+            roomOrderService.change(roomOrderDO, data,roomDO);
+        }catch (Exception e){
+            return Result.build(Result.fail().getCode(),String.format("换房异常:%s",e.getMessage()));
+        }
+        return Result.ok();
+    }
+
+    @Log("退房")
+    @ResponseBody
+    @PostMapping("/checkOut/{orderId}")
+    @RequiresPermissions("hotel:room:in")
+    public Result<String> checkOut(@PathVariable("orderId") Long orderId,RoomOrderDO data){
+        try {
+            RoomOrderDO roomOrderDO = roomOrderService.require(orderId);
+            roomOrderService.checkOut(roomOrderDO, data);
+        }catch (Exception e){
+            return Result.build(Result.fail().getCode(),String.format("退房异常:%s",e.getMessage()));
+        }
+        return Result.ok();
+    }
+
 }
