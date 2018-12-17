@@ -116,8 +116,10 @@ public class RoomOrderServiceImpl extends CoreServiceImpl<RoomOrderDao, RoomOrde
 
     private void init(RoomOrderDO roomOrderDO, RoomDO roomDO) {
         roomOrderDO.setRoomId(roomDO.getId());
+        roomOrderDO.setRoomName(roomDO.getName());
         roomOrderDO.setUnitPrice(roomDO.getPrice());
         roomOrderDO.setExpectCheckInDate(roomOrderDO.getExpectCheckOutDate().minusDays(roomOrderDO.getExpectDay()));
+        roomOrderDO.setCheckInDate(roomOrderDO.getExpectCheckInDate());
         roomOrderDO.setExpectPrice(roomOrderDO.getExpectDay() * roomOrderDO.getUnitPrice());
         roomOrderDO.setStatus(RoomOrderStatus.CSZT.getCode());
         roomOrderDO.setCreateTime(DateHelpers.now());
