@@ -53,6 +53,11 @@ public class DictServiceImpl extends CoreServiceImpl<DictDao, DictDO> implements
         return hobbyList;
     }
 
+    /**
+     * 根据类型获取字典列表
+     * @param type 类型
+     * @return List
+     */
     public List<DictDO> getListByType(String type) {
         return DictDO.dao.selectList("type = {0}", type);
     }

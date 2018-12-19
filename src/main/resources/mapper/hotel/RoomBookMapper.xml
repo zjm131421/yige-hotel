@@ -9,6 +9,21 @@
         <include refid="conditionSql"></include>
     </select>
 
+    <sql id="conditionSql">
+        <where>
+            t1.enabled = 1
+            <if test='name !=null and name !=""'>
+                and t1.name = #{name}
+            </if>
+            <if test='type !=null and type !=""'>
+                and t1.type = #{type}
+            </if>
+            <if test='status !=null and status !=""'>
+                and t2.status = #{status}
+            </if>
+        </where>
+    </sql>
+
     <select id="getByDto" parameterType="com.yige.hotel.dto.RoomDTO" resultType="com.yige.hotel.domain.RoomBookDO">
         select * from room_bookings
         <where>
@@ -26,21 +41,6 @@
             </if>
         </where>
     </select>
-
-    <sql id="conditionSql">
-        <where>
-            t1.enabled = 1
-            <if test='name !=null and name !=""'>
-                and t1.name = #{name}
-            </if>
-            <if test='type !=null and type !=""'>
-                and t1.type = #{type}
-            </if>
-            <if test='status !=null and status !=""'>
-                and t2.status = #{status}
-            </if>
-        </where>
-    </sql>
 
 
 </mapper>

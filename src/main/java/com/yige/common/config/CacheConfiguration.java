@@ -34,7 +34,7 @@ public class CacheConfiguration {
 
     private static Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    /** 配置spring.redis.host时使用RedisCacheManager，否则使用EhCacheCacheManager */
+    /** 配置spring.redis.host时使用RedisCacheManager，否则使用EhCacheManager */
     @Bean
     @ConditionalOnProperty(prefix="spring.redis", name="host", havingValue="false", matchIfMissing=true)
     public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {

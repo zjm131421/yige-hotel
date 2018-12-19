@@ -68,6 +68,7 @@ public class DeptController extends AdminBaseController {
         return PREFIX + "/add";
     }
 
+    @ApiOperation(value = "编辑部门", notes = "")
     @GetMapping("/edit/{deptId}")
     @RequiresPermissions("system:sysDept:edit")
     @Log("编辑部门")

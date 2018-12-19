@@ -36,6 +36,38 @@ public class MenuServiceImpl extends CoreServiceImpl<MenuDao, MenuDO> implements
     @Autowired
     private RoleMenuDao roleMenuDao;
 
+    @Override
+    public Tree<MenuDO> getTree() {
+        List<Tree<MenuDO>> trees = new ArrayList<>();
+        List<MenuDO> menuDOs = baseMapper.selectList(null);
+        for (MenuDO sysMenuDO : menuDOs) {
+            Tree<MenuDO> tree = new Tree<>();
+            tree.setId(sysMenuDO.getId().toString());
+            tree.setParentId(sysMenuDO.getParentId().toString());
+            tree.setText(sysMenuDO.getName());
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        return BuildTree.build(trees);
+    }
+
+    /**
+     * 获取系统菜单树
+     * @param id 菜单id
+     * @return Tree
+     */
+    @Override
+    public Tree<MenuDO> getSysMenuTree(Long id) {
+        List<MenuDO> menuDOs = baseMapper.listMenuByUserId(id);
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        return BuildTree.build(handleMenuDOs(menuDOs));
+    }
+
+    /**
+     * 处理菜单
+     * @param menuDOs 菜单列表
+     * @return List
+     */
     private List<Tree<MenuDO>> handleMenuDOs(List<MenuDO> menuDOs){
         return menuDOs.stream().map(menuDO -> {
             Tree<MenuDO> tree = new Tree<MenuDO>();
@@ -51,32 +83,10 @@ public class MenuServiceImpl extends CoreServiceImpl<MenuDao, MenuDO> implements
     }
 
     @Override
-    public Tree<MenuDO> getSysMenuTree(Long id) {
-        List<MenuDO> menuDOs = baseMapper.listMenuByUserId(id);
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        return BuildTree.build(handleMenuDOs(menuDOs));
-    }
-
-    @Override
     public List<Tree<MenuDO>> listMenuTree(Long id) {
         List<MenuDO> menuDOs = baseMapper.listMenuByUserId(id);
         // 默认顶级菜单为０，根据数据库实际情况调整
         return BuildTree.buildList(handleMenuDOs(menuDOs), "0");
-    }
-
-    @Override
-    public Tree<MenuDO> getTree() {
-        List<Tree<MenuDO>> trees = new ArrayList<Tree<MenuDO>>();
-        List<MenuDO> menuDOs = baseMapper.selectList(null);
-        for (MenuDO sysMenuDO : menuDOs) {
-            Tree<MenuDO> tree = new Tree<MenuDO>();
-            tree.setId(sysMenuDO.getId().toString());
-            tree.setParentId(sysMenuDO.getParentId().toString());
-            tree.setText(sysMenuDO.getName());
-            trees.add(tree);
-        }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        return BuildTree.build(trees);
     }
 
     @Override

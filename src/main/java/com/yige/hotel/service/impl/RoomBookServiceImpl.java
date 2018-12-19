@@ -89,6 +89,11 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         return roomBookDO;
     }
 
+    /**
+     * 入住
+     * @param roomOrderDO 订单
+     * @return 预定记录
+     */
     public RoomBookDO checkIn(RoomOrderDO roomOrderDO){
         Optional<RoomBookDO> optionalBookDO = get(roomOrderDO.getBookId());
         return optionalBookDO.map(roomBookDO -> {
@@ -159,6 +164,12 @@ public class RoomBookServiceImpl extends CoreServiceImpl<RoomBookDao,RoomBookDO>
         roomBookDO.setRoomId(roomDO.getId());
     }
 
+    /**
+     * 预定列表
+     * @param page 分页
+     * @param dto 入参
+     * @return Page
+     */
     @SuppressWarnings("unchecked")
     public Page<RoomVO> listBook(Page page,RoomDTO dto) {
         if(StringUtils.isBlank(dto.getBookDate())){

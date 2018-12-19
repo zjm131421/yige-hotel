@@ -49,14 +49,7 @@ public class ShiroConfig {
 
     @Bean
     SessionDAO sessionDAO(AppConfig config) {
-//        EnterpriseCacheSessionDAO sessionDAO = new EnterpriseCacheSessionDAO();
-//        CacheManager cacheManager = enterpriseCacheSessionDAO.getCacheManager();
-//        return enterpriseCacheSessionDAO;
-
-        RedisSessionDAO sessionDAO = new RedisSessionDAO("ifast:session");
-
-//        SessionDAO sessionDAO = new MemorySessionDAO();
-        return sessionDAO;
+        return new RedisSessionDAO("yige:session");
     }
 
     @Bean
@@ -69,12 +62,6 @@ public class ShiroConfig {
         RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
-//        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer( Object.class );
-//        ObjectMapper om = new ObjectMapper ();
-//        jackson2JsonRedisSerializer.setObjectMapper ( om );
-//        template.setValueSerializer(jackson2JsonRedisSerializer);
-//        template.setHashKeySerializer(new StringRedisSerializer());
-//        template.afterPropertiesSet();
         return template;
     }
 
@@ -101,8 +88,20 @@ public class ShiroConfig {
 
     @Bean
     SysUserAuthorizingRealm sysUserRealm() {
-        SysUserAuthorizingRealm userRealm = new SysUserAuthorizingRealm();
-        return userRealm;
+        return new SysUserAuthorizingRealm();
+    }
+
+    @Bean
+    SecurityManager securityManager(SessionManager sessionManager) {
+        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
+        List<Realm> realms = new ArrayList<>();
+        realms.add(sysUserRealm());
+        manager.setRealms(realms);
+        manager.setAuthenticator(authenticator());
+        manager.setAuthorizer(authorizer());
+        manager.setCacheManager(cacheManager());
+        manager.setSessionManager(sessionManager);
+        return manager;
     }
 
     @Bean
@@ -125,24 +124,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    SecurityManager securityManager(SessionManager sessionManager) {
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        List<Realm> realms = new ArrayList<>();
-        realms.add(sysUserRealm());
-        manager.setRealms(realms);
-        manager.setAuthenticator(authenticator());
-        manager.setAuthorizer(authorizer());
-        manager.setCacheManager(cacheManager());
-        manager.setSessionManager(sessionManager);
-        return manager;
-    }
-
-    @Bean
     ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
         Map<String, Filter> filterMap = new HashMap<>();
-//        filterMap.put("jwt", new JWTAuthenticationFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
 
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -150,7 +135,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSuccessUrl("/index");
         shiroFilterFactoryBean.setUnauthorizedUrl("/shiro/405");
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-//        filterChainDefinitionMap.put("/api/**", "jwt"); // api
         filterChainDefinitionMap.put("/swagger-ui.html**", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
